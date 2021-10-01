@@ -1,4 +1,3 @@
-@use 'sass:list';
 @use 'styles/scrollbar';
 @use 'styles/theme.light';
 
@@ -15,7 +14,7 @@ html {
 }
 
 body {
-  font-family: var(--font-family, list.nth($fonts, 1)), sans-serif;
+  font-family: var(--font-family, 'Inter'), sans-serif;
   min-height: 100%;
 }
 

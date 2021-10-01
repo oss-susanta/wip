@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, Badge, Dropdown, Menu } from 'antd';
 import { AiFillAppstore, AiFillFileAdd, AiFillFile } from 'react-icons/ai';
-import { BsQuestionOctagonFill } from 'react-icons/bs';
+import { BsFillBookmarksFill, BsQuestionOctagonFill } from 'react-icons/bs';
 import {
   FaBell,
   FaBookOpen,
@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import { ImBin2, ImRedo2, ImUndo2 } from 'react-icons/im';
 import { MdHeadsetMic, MdNewReleases } from 'react-icons/md';
+import * as keyBindings from '../configs/keyBindings';
 
 const menuIconStyle = {
   fontSize: '16px',
@@ -25,14 +26,13 @@ function createMenu(options) {
         if (menu.type === 'divider') {
           return <Menu.Divider key={menu.id} />;
         }
+        const shortcut = keyBindings.getBinding(menu.id);
         const icon = menu.Icon ? <menu.Icon style={menuIconStyle} /> : null;
         return (
           <Menu.Item key={menu.id} icon={icon}>
             <div className="flex items-center justify-between">
               <span>{menu.text}</span>
-              {menu.shortcut && (
-                <kbd className="ml-4 text-xs">{menu.shortcut}</kbd>
-              )}
+              {shortcut && <kbd className="ml-4 text-xs">{shortcut}</kbd>}
             </div>
           </Menu.Item>
         );
@@ -42,39 +42,94 @@ function createMenu(options) {
 }
 
 const avatarOptions = [
-  { id: 'profile', text: 'User Profile', Icon: FaUser },
-  { id: 'settings', text: 'Settings', Icon: FaCog },
-  { id: 'divider', type: 'divider' },
-  { id: 'log_out', text: 'Log Out', Icon: FaSignOutAlt },
+  {
+    id: 'showProfile',
+    text: 'User Profile',
+    Icon: FaUser,
+  },
+  {
+    id: 'showSettings',
+    text: 'Settings',
+    Icon: FaCog,
+  },
+  {
+    id: 'divider',
+    type: 'divider',
+  },
+  {
+    id: 'logOut',
+    text: 'Log Out',
+    Icon: FaSignOutAlt,
+  },
 ];
 
 const helpOptions = [
-  { id: 'changelog', text: 'Release Notes', Icon: MdNewReleases },
-  { id: 'faq', text: 'Troubleshoot', Icon: FaTools },
-  { id: 'docs', text: 'Documentation', Icon: FaBookOpen },
-  { id: 'divider', type: 'divider' },
-  { id: 'support', text: 'Contact Support', Icon: MdHeadsetMic },
+  {
+    id: 'showReleaseNotes',
+    text: 'Release Notes',
+    Icon: MdNewReleases,
+  },
+  {
+    id: 'showTroubleshoot',
+    text: 'Troubleshoot',
+    Icon: FaTools,
+  },
+  {
+    id: 'showDocumentation',
+    text: 'Documentation',
+    Icon: FaBookOpen,
+  },
+  {
+    id: 'divider',
+    type: 'divider',
+  },
+  {
+    id: 'showContactSupport',
+    text: 'Contact Support',
+    Icon: MdHeadsetMic,
+  },
 ];
 
 const startOptions = [
   {
-    id: 'new_dashboard',
+    id: 'createNewDashboard',
     text: 'New Dashboard',
-    shortcut: 'Alt+N',
     Icon: AiFillFileAdd,
   },
   {
-    id: 'open_dashboard',
+    id: 'openDashboard',
     text: 'Open Dashboard',
-    shortcut: 'Alt+O',
     Icon: AiFillFile,
   },
-  { id: 'save', text: 'Save', shortcut: 'Alt+S', Icon: FaSave },
-  { id: 'save_as', text: 'Save As...', shortcut: 'Alt+Shift+S', Icon: FaSave },
-  { id: 'undo', text: 'Undo', shortcut: 'Ctrl+Z', Icon: ImUndo2 },
-  { id: 'redo', text: 'Redo', shortcut: 'Ctrl+Y', Icon: ImRedo2 },
-  { id: 'divider', type: 'divider' },
-  { id: 'clear', text: 'Clear Dashboard', Icon: ImBin2 },
+  {
+    id: 'saveDashboard',
+    text: 'Save',
+    Icon: FaSave,
+  },
+  {
+    id: 'saveAsDashboard',
+    text: 'Save As...',
+    Icon: FaSave,
+  },
+  {
+    id: 'undo',
+    text: 'Undo',
+    Icon: ImUndo2,
+  },
+  {
+    id: 'redo',
+    text: 'Redo',
+    Icon: ImRedo2,
+  },
+  {
+    id: 'divider',
+    type: 'divider',
+  },
+  {
+    id: 'clearDashboard',
+    text: 'Clear Dashboard',
+    Icon: ImBin2,
+  },
 ];
 
 const headerIconStyle = {
@@ -84,11 +139,12 @@ const headerIconStyle = {
 export default function Header({ userId, messageCount }) {
   return (
     <header className="h-12 px-6 flex items-center gap-2 bg-paper shadow-md">
-      <Dropdown overlay={createMenu(startOptions)} placement="bottomLeft">
-        <AiFillAppstore style={headerIconStyle} />
-      </Dropdown>
-      <div className="flex-1">Header</div>
+      <AiFillAppstore style={headerIconStyle} />
+      <h1 className="flex-1 m-0 text-lg">Untitled Dashboard</h1>
       <nav className="flex-none flex items-center gap-4">
+        <Dropdown overlay={createMenu(startOptions)} placement="bottomCenter">
+          <BsFillBookmarksFill style={headerIconStyle} />
+        </Dropdown>
         <Badge dot count={messageCount} size="small">
           <FaBell style={headerIconStyle} />
         </Badge>
