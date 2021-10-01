@@ -1,14 +1,33 @@
+@use 'sass:list';
+@use 'styles/scrollbar';
+@use 'styles/theme.light';
+
+$fonts: 'Inter', 'Rubik';
+// @each $font in $fonts {
+//   @font-face {
+//     font-family: '#{$font}';
+//     src: url('./fonts/#{$font}.ttf');
+//   }
+// }
+
 html {
   height: 100%;
 }
 
 body {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-family, list.nth($fonts, 1)), sans-serif;
   min-height: 100%;
 }
 
 #root {
   height: 100%;
+}
+
+pre,
+code,
+kbd,
+samp {
+  font-family: var(--font-family-mono, 'DM Mono');
 }
 
 .ant-tooltip-arrow {
