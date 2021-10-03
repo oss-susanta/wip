@@ -1,20 +1,15 @@
+@use 'styles/fonts';
 @use 'styles/scrollbar';
 @use 'styles/theme.light';
-
-$fonts: 'Inter', 'Rubik';
-// @each $font in $fonts {
-//   @font-face {
-//     font-family: '#{$font}';
-//     src: url('./fonts/#{$font}.ttf');
-//   }
-// }
 
 html {
   height: 100%;
 }
 
 body {
-  font-family: var(--font-family, 'Inter'), sans-serif;
+  font-family: var(--font-family, 'circular_std'), sans-serif;
+  text-rendering: optimizeLegibility;
+  font-variant: tabular-nums;
   min-height: 100%;
 }
 
@@ -26,7 +21,7 @@ pre,
 code,
 kbd,
 samp {
-  font-family: var(--font-family-mono, 'DM Mono');
+  font-family: var(--font-family-mono, 'jetbrains_mono');
 }
 
 .ant-tooltip-arrow {

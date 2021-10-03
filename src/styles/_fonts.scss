@@ -1,0 +1,36 @@
+@use 'sass:map';
+@use 'sass:string';
+
+$fonts: (
+  'rubik': (),
+  'inter': (),
+  'circular_std': (),
+  'jetbrains_mono': (),
+);
+
+$defaults: (
+  'weights': (
+    400,
+  ),
+  'format': 'woff2',
+);
+
+@each $family-name, $config in $fonts {
+  $font: map.merge($defaults, $config);
+  $format: map.get($font, 'format');
+  $weights: map.get($font, 'weights');
+
+  @each $weight in $weights {
+    $file-name: string.to-lower-case($family-name);
+    @if $weight != 400 {
+      $file-name: '#{$file-name}_#{$weight}';
+    }
+
+    @font-face {
+      font-family: $family-name;
+      font-style: normal;
+      font-weight: $weight;
+      src: local(''), url('./fonts/#{$file-name}.#{$format}') format($format);
+    }
+  }
+}

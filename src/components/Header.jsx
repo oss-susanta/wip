@@ -13,13 +13,12 @@ import {
 } from 'react-icons/fa';
 import { ImBin2, ImRedo2, ImUndo2 } from 'react-icons/im';
 import { MdHeadsetMic, MdNewReleases } from 'react-icons/md';
-import * as keyBindings from '../configs/keyBindings';
 
 const menuIconStyle = {
   fontSize: '16px',
 };
 
-function createMenu(options) {
+function createMenu(options, keyBindings) {
   return (
     <Menu>
       {options.map((menu) => {
@@ -32,7 +31,7 @@ function createMenu(options) {
           <Menu.Item key={menu.id} icon={icon}>
             <div className="flex items-center justify-between">
               <span>{menu.text}</span>
-              {shortcut && <kbd className="ml-4 text-xs">{shortcut}</kbd>}
+              {shortcut && <span className="ml-4 text-xs">{shortcut}</span>}
             </div>
           </Menu.Item>
         );
@@ -136,22 +135,31 @@ const headerIconStyle = {
   fontSize: 20,
 };
 
-export default function Header({ userId, messageCount }) {
+export default function Header({ userId, messageCount, keyBindings }) {
   return (
     <header className="h-12 px-6 flex items-center gap-2 bg-paper shadow-md">
       <AiFillAppstore style={headerIconStyle} />
       <h1 className="flex-1 m-0 text-lg">Untitled Dashboard</h1>
       <nav className="flex-none flex items-center gap-4">
-        <Dropdown overlay={createMenu(startOptions)} placement="bottomCenter">
+        <Dropdown
+          overlay={createMenu(startOptions, keyBindings)}
+          placement="bottomCenter"
+        >
           <BsFillBookmarksFill style={headerIconStyle} />
         </Dropdown>
         <Badge dot count={messageCount} size="small">
           <FaBell style={headerIconStyle} />
         </Badge>
-        <Dropdown overlay={createMenu(helpOptions)} placement="bottomCenter">
+        <Dropdown
+          overlay={createMenu(helpOptions, keyBindings)}
+          placement="bottomCenter"
+        >
           <BsQuestionOctagonFill style={headerIconStyle} />
         </Dropdown>
-        <Dropdown overlay={createMenu(avatarOptions)} placement="bottomCenter">
+        <Dropdown
+          overlay={createMenu(avatarOptions, keyBindings)}
+          placement="bottomCenter"
+        >
           <figure className="flex items-center gap-1 m-0">
             <Avatar size="small" icon={<FaUser />} />
             <figcaption className="text-xs">{userId}</figcaption>

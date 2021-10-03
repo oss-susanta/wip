@@ -1,13 +1,12 @@
 import { useRef, useCallback, useEffect } from 'react';
-import * as keyBindings from '../configs/keyBindings';
 
 const KEY_MODIFIERS = ['alt', 'ctrl', 'meta', 'shift'];
 
-export default function KeyBinder({ onCommand }) {
+export function useKeyEvent({ keyBindings, onCommand }) {
   const ref = useRef();
-  ref.current = { onCommand };
+  ref.current = { keyBindings, onCommand };
 
-  const handleKeyDown = useCallback((event) => {
+  const handleEvent = useCallback((event) => {
     const { isContentEditable, nodeName } = event.target;
     if (nodeName === 'INPUT' || nodeName === 'TEXTAREA' || isContentEditable) {
       return;
@@ -20,11 +19,18 @@ export default function KeyBinder({ onCommand }) {
     });
     detectedKeys.push(event.key.toLowerCase());
     const seq = detectedKeys.sort().join('+');
+    const { keyBindings, onCommand } = ref.current;
     const commandId = keyBindings.getCommandId(seq);
     if (commandId) {
-      ref.current.onCommand(commandId, event);
+      onCommand(commandId, event);
     }
   }, []);
+
+  return handleEvent;
+}
+
+export default function KeyBinder(props) {
+  const handleKeyDown = useKeyEvent(props);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown, false);
