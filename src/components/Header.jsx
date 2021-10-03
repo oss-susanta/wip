@@ -18,9 +18,9 @@ const menuIconStyle = {
   fontSize: '16px',
 };
 
-function createMenu(options, keyBindings) {
+function createMenu(options, keyBindings, onCommand) {
   return (
-    <Menu>
+    <Menu onClick={onCommand}>
       {options.map((menu) => {
         if (menu.type === 'divider') {
           return <Menu.Divider key={menu.id} />;
@@ -135,14 +135,22 @@ const headerIconStyle = {
   fontSize: 20,
 };
 
-export default function Header({ userId, messageCount, keyBindings }) {
+export default function Header({
+  userId,
+  messageCount,
+  keyBindings,
+  onCommand,
+}) {
+  const handleCommand = ({ key }) => {
+    onCommand(key);
+  };
   return (
     <header className="h-12 px-6 flex items-center gap-2 bg-paper shadow-md">
       <AiFillAppstore style={headerIconStyle} />
       <h1 className="flex-1 m-0 text-lg">Untitled Dashboard</h1>
       <nav className="flex-none flex items-center gap-4">
         <Dropdown
-          overlay={createMenu(startOptions, keyBindings)}
+          overlay={createMenu(startOptions, keyBindings, handleCommand)}
           placement="bottomCenter"
         >
           <BsFillBookmarksFill style={headerIconStyle} />
@@ -151,13 +159,13 @@ export default function Header({ userId, messageCount, keyBindings }) {
           <FaBell style={headerIconStyle} />
         </Badge>
         <Dropdown
-          overlay={createMenu(helpOptions, keyBindings)}
+          overlay={createMenu(helpOptions, keyBindings, handleCommand)}
           placement="bottomCenter"
         >
           <BsQuestionOctagonFill style={headerIconStyle} />
         </Dropdown>
         <Dropdown
-          overlay={createMenu(avatarOptions, keyBindings)}
+          overlay={createMenu(avatarOptions, keyBindings, handleCommand)}
           placement="bottomCenter"
         >
           <figure className="flex items-center gap-1 m-0">
