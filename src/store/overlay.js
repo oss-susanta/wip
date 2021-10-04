@@ -1,11 +1,13 @@
 import { proxy } from 'valtio';
 
 export const state = proxy({
-  showSettings: false,
+  about: false,
+  settings: false,
+  userProfile: false,
 });
 
 export const actions = {
-  toggleSettings(showOrHide) {
-    state.showSettings = showOrHide == null ? !state.showSettings : showOrHide;
+  toggle(name, value) {
+    state[name] = value;
   },
 };

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Avatar, Badge, Dropdown, Menu } from 'antd';
 import { AiFillAppstore, AiFillFileAdd, AiFillFile } from 'react-icons/ai';
-import { BsFillBookmarksFill, BsQuestionOctagonFill } from 'react-icons/bs';
+import {
+  BsFillBookmarksFill,
+  BsInfoCircleFill,
+  BsQuestionOctagonFill,
+} from 'react-icons/bs';
+import { FiExternalLink } from 'react-icons/fi';
 import {
   FaBell,
   FaBookOpen,
@@ -18,6 +23,21 @@ const menuIconStyle = {
   fontSize: '16px',
 };
 
+function MenuContent({ href, children }) {
+  const className = 'flex items-center gap-4';
+  return href ? (
+    <a
+      className={className}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {children}
+    </a>
+  ) : (
+    <div className={className}>{children}</div>
+  );
+}
 function createMenu(options, keyBindings, onCommand) {
   return (
     <Menu onClick={onCommand}>
@@ -29,10 +49,13 @@ function createMenu(options, keyBindings, onCommand) {
         const icon = menu.Icon ? <menu.Icon style={menuIconStyle} /> : null;
         return (
           <Menu.Item key={menu.id} icon={icon}>
-            <div className="flex items-center justify-between">
+            <MenuContent href={menu.href}>
               <span>{menu.text}</span>
-              {shortcut && <span className="ml-4 text-xs">{shortcut}</span>}
-            </div>
+              {menu.href && (
+                <FiExternalLink className="ml-auto" style={menuIconStyle} />
+              )}
+              {shortcut && <span className="ml-auto text-xs">{shortcut}</span>}
+            </MenuContent>
           </Menu.Item>
         );
       })}
@@ -42,7 +65,7 @@ function createMenu(options, keyBindings, onCommand) {
 
 const avatarOptions = [
   {
-    id: 'showProfile',
+    id: 'showUserProfile',
     text: 'User Profile',
     Icon: FaUser,
   },
@@ -67,16 +90,19 @@ const helpOptions = [
     id: 'showReleaseNotes',
     text: 'Release Notes',
     Icon: MdNewReleases,
+    href: 'https://google.com',
   },
   {
     id: 'showTroubleshoot',
     text: 'Troubleshoot',
     Icon: FaTools,
+    href: 'https://google.com',
   },
   {
     id: 'showDocumentation',
     text: 'Documentation',
     Icon: FaBookOpen,
+    href: 'https://google.com',
   },
   {
     id: 'divider',
@@ -86,6 +112,12 @@ const helpOptions = [
     id: 'showContactSupport',
     text: 'Contact Support',
     Icon: MdHeadsetMic,
+    href: 'https://google.com',
+  },
+  {
+    id: 'showAbout',
+    text: 'About',
+    Icon: BsInfoCircleFill,
   },
 ];
 
