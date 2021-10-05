@@ -6,10 +6,12 @@ import './main.scss';
 import Header from './components/Header';
 import KeyBinder from './components/KeyBinder';
 import Sidebar from './components/Sidebar';
+import SidePane from './components/SidePane';
 import Split from './components/Split';
 import createLazy from './components/lazy';
 import * as overlay from './store/overlay';
 import * as settings from './store/settings';
+import * as sidepane from './store/sidepane';
 import { appKeyBindings } from './configs/keyBindings';
 import createKeyBindings from './utils/keyBindings';
 
@@ -26,6 +28,7 @@ const user = {
 
 export default function App() {
   const overlaySnap = useSnapshot(overlay.state);
+  const sidepaneSnap = useSnapshot(sidepane.state);
   const settingsSnap = useSnapshot(settings.state);
   const hideSidebar = () => {
     if (overlaySnap.sidebar) {
@@ -54,6 +57,8 @@ export default function App() {
         />
         <section className="flex-1 flex relative">
           <Sidebar
+            selected={sidepaneSnap.selected}
+            onSelect={(next) => sidepane.actions.select(next)}
             visible={overlaySnap.sidebar}
             onVisibilityChange={(visible) =>
               overlay.actions.toggle('sidebar', visible)
@@ -63,11 +68,13 @@ export default function App() {
             className="flex-none"
             style={{ width: settingsSnap.asideSize }}
             onMouseEnter={hideSidebar}
-          />
+          >
+            <SidePane type={sidepaneSnap.selected} />
+          </aside>
           <Split
             minSize={360}
             size={settingsSnap.asideSize}
-            className="flex-none h-full w-1 bg-paper2"
+            className="flex-none h-full w-1"
             style={{ cursor: 'col-resize' }}
             onSizeChange={(asideSize) => settings.actions.update({ asideSize })}
           />

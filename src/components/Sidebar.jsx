@@ -48,10 +48,13 @@ export default function Sidebar({
   };
   return (
     <>
-      <span className="w-6" onMouseEnter={handleMouseEnter} />
+      <span
+        className="absolute inset-0 w-6 z-10"
+        onMouseEnter={handleMouseEnter}
+      />
       <aside
         hidden={!visible}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 -mt-12 shadow-md"
+        className="absolute left-0 top-1/2 z-10 transform -translate-y-1/2 -mt-12 shadow-md"
       >
         <Menu
           mode="inline"
