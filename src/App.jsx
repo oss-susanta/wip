@@ -5,6 +5,8 @@ import './styles/tailwind.css';
 import './main.scss';
 import Header from './components/Header';
 import KeyBinder from './components/KeyBinder';
+import Sidebar from './components/Sidebar';
+import Split from './components/Split';
 import createLazy from './components/lazy';
 import * as overlay from './store/overlay';
 import * as settings from './store/settings';
@@ -25,6 +27,11 @@ const user = {
 export default function App() {
   const overlaySnap = useSnapshot(overlay.state);
   const settingsSnap = useSnapshot(settings.state);
+  const hideSidebar = () => {
+    if (overlaySnap.sidebar) {
+      overlay.actions.toggle('sidebar', false);
+    }
+  };
   const handleCommand = (commandId) => {
     if (commandId === 'showAbout') {
       overlay.actions.toggle('about', true);
@@ -38,12 +45,35 @@ export default function App() {
   };
   return (
     <>
-      <Header
-        userId={user.userId}
-        messageCount={10}
-        keyBindings={keyBindings}
-        onCommand={handleCommand}
-      />
+      <div className="w-full h-full flex flex-col">
+        <Header
+          userId={user.userId}
+          messageCount={10}
+          keyBindings={keyBindings}
+          onCommand={handleCommand}
+        />
+        <section className="flex-1 flex relative">
+          <Sidebar
+            visible={overlaySnap.sidebar}
+            onVisibilityChange={(visible) =>
+              overlay.actions.toggle('sidebar', visible)
+            }
+          />
+          <aside
+            className="flex-none"
+            style={{ width: settingsSnap.asideSize }}
+            onMouseEnter={hideSidebar}
+          />
+          <Split
+            minSize={360}
+            size={settingsSnap.asideSize}
+            className="flex-none h-full w-1 bg-paper2"
+            style={{ cursor: 'col-resize' }}
+            onSizeChange={(asideSize) => settings.actions.update({ asideSize })}
+          />
+          <main className="flex-1" onMouseEnter={hideSidebar} />
+        </section>
+      </div>
       <KeyBinder
         keyBindings={keyBindings}
         onCommand={(commandId, event) => {
